@@ -18,6 +18,7 @@ The architecture of WebDataLayerBus is based on the publish-subscribe pattern. W
 
    Copy the the follwing js code snippet to your webpage inside `<head>` tag before call all depdendencies
 
+   *Original version:*
    ```javascript
    (function () {
      function WebDataLayerBus(dataLayerName) {
@@ -57,6 +58,10 @@ The architecture of WebDataLayerBus is based on the publish-subscribe pattern. W
      // Expose WebDataLayerBus to the global scope
      window.WebDataLayerBus = WebDataLayerBus;
    })();
+   ```
+   *Minified version:*
+   ```javascript
+   (function(){function WebDataLayerBus(n){n=n||"webDataLayerBus";window[n]=window[n]||[];window[n+"Subscribers"]=window[n+"Subscribers"]||{};var o=Array.prototype.push;window[n].push=function(){o.apply(window[n],arguments);for(var s in window[n+"Subscribers"]){if(Object.prototype.hasOwnProperty.call(window[n+"Subscribers"],s)){window[n+"Subscribers"][s](arguments[0]);}}};this.subscribe=function(s,c){if(window[n+"Subscribers"][s]){throw new Error("Subscriber "+s+" already exists");}window[n+"Subscribers"][s]=c;for(var i=0;i<window[n].length;i++){c(window[n][i]);}};}window.WebDataLayerBus=WebDataLayerBus;})();
    ```
 
 2. **Initialize the data layer**
