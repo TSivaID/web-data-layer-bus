@@ -16,9 +16,9 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
 
 ## Usage
 
-1. **Embed WebDataLayerBus code**
+1. **Integrate WebDataLayerBus into your project**
 
-   Copy the the follwing js code snippet to your webpage inside `<head>` tag before call all depdendencies
+   To get started, simply embed the WebDataLayerBus JavaScript code snippet into your webpage. It is recommended to place the code inside the `<head>` tag, before loading any other dependencies, to ensure that the utility is available for all subsequent scripts.
 
    _Original version:_
 
@@ -108,6 +108,7 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
 
    ```javascript
    // Independent Module A
+   window.customWebDataLayerBus = window.customWebDataLayerBus || [];
    window.customWebDataLayerBus.push({
      subscriber: "moduleASubscriber",
      callback: function (data) {
@@ -122,12 +123,14 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
            userCategorySavedHandlerInModuleA(data.payload);
            break;
          default:
+           console.log("[MODULE A] Unknown action: ", data.action);
            break;
        }
      },
    });
 
    // Independent Module B
+   window.customWebDataLayerBus = window.customWebDataLayerBus || [];
    window.customWebDataLayerBus.push({
      subscriber: "moduleBSubscriber",
      callback: function (data) {
@@ -136,6 +139,7 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
            userSigninHandlerInModuleB(data.payload);
            break;
          default:
+           console.log("[MODULE B] Unknown action: ", data.action);
            break;
        }
      },
@@ -147,7 +151,8 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
    Push new data to the data layer using the push method. All subscribed modules will be notified, and their callback functions will be called with the new data.
 
    ```javascript
-   // Push data to the data layer
+   // Push data to the data layer from any module
+   window.customWebDataLayerBus = window.customWebDataLayerBus || [];
    window.customWebDataLayerBus.push({ action: "user-signin", payload: { id: "abcxyz" } });
    window.customWebDataLayerBus.push({ action: "user-category-fetch", payload: { id: "abcxyz", categories: [] } });
    window.customWebDataLayerBus.push({
@@ -158,6 +163,8 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
      action: "user-category-fetch",
      payload: { id: "abcxyz", categories: ["News"] },
    });
+   window.customWebDataLayerBus.push({ action: "user-signout", payload: { id: "abcxyz" } });
+   window.customWebDataLayerBus.push({ action: "track-event", payload: { name: "user-signout", data: { id: "abcxyz" } } })
    ```
 
 ## License
