@@ -22,61 +22,63 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
 
    _Original version:_
 
-   ```javascript
-   (function () {
-     function WebDataLayerBus(dataLayerName) {
-       dataLayerName = dataLayerName || "webDataLayerBus";
-       window[dataLayerName] = window[dataLayerName] || [];
-       window[dataLayerName + "Subscribers"] = window[dataLayerName + "Subscribers"] || {};
-
-       var originalPush = Array.prototype.push;
-       window[dataLayerName].push = function (data) {
-         if (data.subscriber && data.callback && typeof data.callback === "function") {
-           if (window[dataLayerName + "Subscribers"][data.subscriber]) {
-             throw new Error("Subscriber " + data.subscriber + " already exists");
-           }
-           window[dataLayerName + "Subscribers"][data.subscriber] = data.callback;
-
-           // Process the existing dataLayer
-           for (var i = 0; i < window[dataLayerName].length; i++) {
-             data.callback(window[dataLayerName][i]);
-           }
-         } else {
-           // Call the original push function with the provided arguments
-           originalPush.call(window[dataLayerName], data);
-           console.log("pushed with ", data);
-
-           // Notify subscribers
-           for (var subscriber in window[dataLayerName + "Subscribers"]) {
-             if (Object.prototype.hasOwnProperty.call(window[dataLayerName + "Subscribers"], subscriber)) {
-               console.log("notifying " + subscriber + " with ", data);
-               window[dataLayerName + "Subscribers"][subscriber](data);
-             }
-           }
-         }
-       };
-     }
-
-     // Expose WebDataLayerBus to the global scope
-     window.WebDataLayerBus = WebDataLayerBus;
-   })();
-   ```
+    ```javascript
+    (function () {
+      function WebDataLayerBus(dataLayerName) {
+        dataLayerName = dataLayerName || "webDataLayerBus";
+        window[dataLayerName] = window[dataLayerName] || [];
+        window[dataLayerName + "Subscribers"] = window[dataLayerName + "Subscribers"] || {};
+    
+        var originalPush = Array.prototype.push;
+        window[dataLayerName].push = function (data) {
+          if (data.subscriber && data.callback && typeof data.callback === "function") {
+            if (window[dataLayerName + "Subscribers"][data.subscriber]) {
+              throw new Error("Subscriber " + data.subscriber + " already exists");
+            }
+            window[dataLayerName + "Subscribers"][data.subscriber] = data.callback;
+    
+            // Process the existing dataLayer
+            for (var i = 0; i < window[dataLayerName].length; i++) {
+              data.callback(window[dataLayerName][i]);
+            }
+          } else {
+            // Call the original push function with the provided arguments
+            originalPush.call(window[dataLayerName], data);
+    
+            // Notify subscribers
+            for (var subscriber in window[dataLayerName + "Subscribers"]) {
+              if (Object.prototype.hasOwnProperty.call(window[dataLayerName + "Subscribers"], subscriber)) {
+                try {
+                  window[dataLayerName + "Subscribers"][subscriber](data);
+                } catch (error) {
+                  console.error("Error in subscriber " + subscriber + ": ", error);
+                }
+              }
+            }
+          }
+        };
+      }
+    
+      // Expose WebDataLayerBus to the global scope
+      window.WebDataLayerBus = WebDataLayerBus;
+    })();
+    ```
 
    _Minified version:_
 
-   ```javascript
-    !function(){function t(t){t=t||"webDataLayerBus",window[t]=window[t]||[],window[t+"Subscribers"]=window[t+"Subscribers"]||{};var e=Array.prototype.push;window[t].push=function(n){if(n.subscriber&&n.callback&&"function"==typeof n.callback){if(window[t+"Subscribers"][n.subscriber])throw new Error("Subscriber "+n.subscriber+" already exists");window[t+"Subscribers"][n.subscriber]=n.callback;for(var r=0;r<window[t].length;r++)n.callback(window[t][r])}else{e.call(window[t],n);for(var i in window[t+"Subscribers"])Object.prototype.hasOwnProperty.call(window[t+"Subscribers"],i)&&window[t+"Subscribers"][i](n)}}}window.WebDataLayerBus=t}();
-   ```
+    ```javascript
+    !function(){function e(e){e=e||"webDataLayerBus",window[e]=window[e]||[],window[e+"Subscribers"]=window[e+"Subscribers"]||{};var t=Array.prototype.push;window[e].push=function(r){if(r.subscriber&&r.callback&&"function"==typeof r.callback){if(window[e+"Subscribers"][r.subscriber])throw new Error("Subscriber "+r.subscriber+" already exists");window[e+"Subscribers"][r.subscriber]=r.callback;for(var n=0;n<window[e].length;n++)r.callback(window[e][n])}else{t.call(window[e],r);for(var s in window[e+"Subscribers"])Object.prototype.hasOwnProperty.call(window[e+"Subscribers"],s)&&function(){try{window[e+"Subscribers"][s](r)}catch(e){console.error("Error in subscriber "+s+": ",e)}}()}};window.WebDataLayerBus=e}();
+    ```
 
 2. **Initialize the WebDataLayerBus**
 
    Create a new instance of WebDataLayerBus and pass a custom data layer name as an argument below the embedded code. If no argument is provided, the default name "webDataLayerBus" will be used.
 
-   ```javascript
-   (function () {
-     new WebDataLayerBus("customWebDataLayerBus");
-   })();
-   ```
+    ```javascript
+    (function () {
+      new WebDataLayerBus("customWebDataLayerBus");
+    })();
+    ```
 
 3. **Create action handlers**
 
