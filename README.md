@@ -103,7 +103,7 @@ Here is a simple text-based diagram illustrating the architecture design of WebD
    _Minified version:_
 
     ```javascript
-    !function(){function e(e){e=e||"webDataLayerBus",window[e]=window[e]||[],window[e+"Subscribers"]=window[e+"Subscribers"]||{};var t=Array.prototype.push;window[e].push=function(r){if(r.subscriber&&r.callback&&"function"==typeof r.callback){if(window[e+"Subscribers"][r.subscriber])throw new Error("Subscriber "+r.subscriber+" already exists");window[e+"Subscribers"][r.subscriber]=r.callback;for(var n=0;n<window[e].length;n++)r.callback(window[e][n])}else{t.call(window[e],r);for(var s in window[e+"Subscribers"])Object.prototype.hasOwnProperty.call(window[e+"Subscribers"],s)&&function(){try{window[e+"Subscribers"][s](r)}catch(e){console.error("Error in subscriber "+s+": ",e)}}()}};window.WebDataLayerBus=e}();
+    !function(){function e(e){e=e||"webDataLayerBus",window[e]=window[e]||[],window[e+"Subscribers"]=window[e+"Subscribers"]||{};var n=Array.prototype.push;window[e].push=function(t){if(t.subscriber&&t.callback&&"function"==typeof t.callback){if(window[e+"Subscribers"][t.subscriber])throw new Error("Subscriber "+t.subscriber+" already exists");window[e+"Subscribers"][t.subscriber]=t.callback;for(var r=0;r<window[e].length;r++)t.callback(window[e][r])}else{n.call(window[e],t);for(var s in window[e+"Subscribers"])Object.prototype.hasOwnProperty.call(window[e+"Subscribers"],s)&&function(){try{window[e+"Subscribers"][s](t)}catch(e){console.error("Error in subscriber "+s+": ",e)}}()}}}window.WebDataLayerBus=e}();
     ```
 
 2. **Initialize the WebDataLayerBus**
