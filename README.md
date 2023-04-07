@@ -88,17 +88,13 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
      console.log("[MODULE A] User signed in:", data);
    }
 
-   function userCategoryFetchHandlerInModuleA(data) {
-     console.log("[MODULE A] User categories fetched:", data);
-   }
-
-   function userCategorySavedHandlerInModuleA(data) {
-     console.log("[MODULE A] User categories saved:", data);
+   function userSignoutHandlerInModuleA(data) {
+     console.log("[MODULE A] User signed out:", data);
    }
 
    // Independent Module B
-   function userSigninHandlerInModuleB(data) {
-     console.log("[MODULE B] User signed in:", data);
+   function trackEventHandlerInModuleB(data) {
+     console.log("[MODULE B] Track Event:", data);
    }
    ```
 
@@ -107,43 +103,42 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
    Register action handlers to process the data pushed to the data layer. Action handlers will be called when new data is pushed to the data layer.
 
    ```javascript
-   // Independent Module A
-   window.customWebDataLayerBus = window.customWebDataLayerBus || [];
-   window.customWebDataLayerBus.push({
-     subscriber: "moduleASubscriber",
-     callback: function (data) {
-       switch (data.action) {
-         case "user-signin":
-           userSigninHandlerInModuleA(data.payload);
-           break;
-         case "user-category-fetch":
-           userCategoryFetchHandlerInModuleA(data.payload);
-           break;
-         case "user-category-saved":
-           userCategorySavedHandlerInModuleA(data.payload);
-           break;
-         default:
-           console.log("[MODULE A] Unknown action: ", data.action);
-           break;
-       }
-     },
-   });
-
-   // Independent Module B
-   window.customWebDataLayerBus = window.customWebDataLayerBus || [];
-   window.customWebDataLayerBus.push({
-     subscriber: "moduleBSubscriber",
-     callback: function (data) {
-       switch (data.action) {
-         case "user-signin":
-           userSigninHandlerInModuleB(data.payload);
-           break;
-         default:
-           console.log("[MODULE B] Unknown action: ", data.action);
-           break;
-       }
-     },
-   });
+    // Independent Module A
+    window.customWebDataLayerBus = window.customWebDataLayerBus || [];
+    window.customWebDataLayerBus.push({
+      subscriber: "moduleASubscriber",
+      callback: function (data) {
+        const actions = {
+          "user-signin": userSigninHandlerInModuleA,
+          "user-signout": userSignoutHandlerInModuleA,
+        };
+    
+        const handler = actions[data.action];
+        if (handler) {
+          handler(data.payload);
+        } else {
+          console.log("[MODULE A] Unknown action: ", data.action);
+        }
+      },
+    });
+    
+    // Independent Module B
+    window.customWebDataLayerBus = window.customWebDataLayerBus || [];
+    window.customWebDataLayerBus.push({
+      subscriber: "moduleBSubscriber",
+      callback: function (data) {
+        const actions = {
+          "track-event": trackEventHandlerInModuleB,
+        };
+    
+        const handler = actions[data.action];
+        if (handler) {
+          handler(data.payload);
+        } else {
+          console.log("[MODULE B] Unknown action: ", data.action);
+        }
+      },
+    });
    ```
 
 5. **Push data to the data layer**
@@ -154,15 +149,7 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
    // Push data to the data layer from any module
    window.customWebDataLayerBus = window.customWebDataLayerBus || [];
    window.customWebDataLayerBus.push({ action: "user-signin", payload: { id: "abcxyz" } });
-   window.customWebDataLayerBus.push({ action: "user-category-fetch", payload: { id: "abcxyz", categories: [] } });
-   window.customWebDataLayerBus.push({
-     action: "user-category-saved",
-     payload: { id: "abcxyz", categories: ["News"] },
-   });
-   window.customWebDataLayerBus.push({
-     action: "user-category-fetch",
-     payload: { id: "abcxyz", categories: ["News"] },
-   });
+   window.customWebDataLayerBus.push({ action: "track-event", payload: { name: "user-signin", data: { id: "abcxyz" } } })
    window.customWebDataLayerBus.push({ action: "user-signout", payload: { id: "abcxyz" } });
    window.customWebDataLayerBus.push({ action: "track-event", payload: { name: "user-signout", data: { id: "abcxyz" } } })
    ```
