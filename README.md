@@ -14,6 +14,40 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
 - **Error handling:** Prevents duplicate subscriptions by throwing an error if a module tries to subscribe with an already-existing subscriber name.
 - **Minified version available:** A minified version of the library is provided for production use, without any `console.log` messages. It's ready to be embedded in your webpage without any build process.
 
+## WebDataLayerBus Architecture Design
+
+Here is a simple text-based diagram illustrating the architecture design of WebDataLayerBus:
+
+```plaintext
+                           ┌──────────────┐
+                           │              │
+                           │  Data Layer  │
+                           │              │
+                           └───────▲──────┘
+                                   │
+                                   │
+                                   │ (Push data)
+                                   │
+┌─────┐      ┌─────┐      ┌─────┐  │  ┌─────┐
+│     │      │     │      │     │  │  │     │
+│  A  │◄─────┤  B  │◄─────┤  C  │◄─┼──┤  D  │
+│     │      │     │      │     │  │  │     │
+└─────┘      └─────┘      └─────┘  │  └─────┘
+                                   │
+                              (Subscribe)
+                                   │
+                       ┌───────────┴──────────┐
+                       │                       │
+                       │  Subscribers Registry │
+                       │                       │
+                       └───────────────────────┘
+```
+
+- The Data Layer is a central store for all data pushed from different modules (A, B, C, D).
+- Each module (A, B, C, D) can subscribe to the Data Layer by providing a unique subscriber name and a callback function.
+- The Subscribers Registry keeps track of all subscriber names and their respective callback functions.
+- When new data is pushed into the Data Layer, the Subscribers Registry notifies each subscribed module by invoking their respective callback functions with the new data.
+
 ## Usage
 
 1. **Integrate WebDataLayerBus into your project**
