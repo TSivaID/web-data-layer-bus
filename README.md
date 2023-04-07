@@ -44,11 +44,13 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
           } else {
             // Call the original push function with the provided arguments
             originalPush.call(window[dataLayerName], data);
+            console.log("pushed with ", data);
     
             // Notify subscribers
             for (var subscriber in window[dataLayerName + "Subscribers"]) {
               if (Object.prototype.hasOwnProperty.call(window[dataLayerName + "Subscribers"], subscriber)) {
                 try {
+                  console.log("notifying " + subscriber + " with ", data);
                   window[dataLayerName + "Subscribers"][subscriber](data);
                 } catch (error) {
                   console.error("Error in subscriber " + subscriber + ": ", error);
