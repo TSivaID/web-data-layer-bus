@@ -154,6 +154,18 @@ The core functionality of WebDataLayerBus revolves around its ability to push da
    window.customWebDataLayerBus.push({ action: "track-event", payload: { name: "user-signout", data: { id: "abcxyz" } } })
    ```
 
+## Browser Support
+
+The `WebDataLayerBus` code is written using ECMAScript 5 (ES5) syntax, ensuring compatibility across a wide range of browsers. The code should function correctly in most modern browsers, as well as several older versions, including:
+
+- Google Chrome: version 1 and later
+- Mozilla Firefox: version 3.5 and later
+- Safari: version 4 and later
+- Microsoft Edge: all versions
+- Internet Explorer: version 9 and later
+
+While the code is compatible with older browser versions, it's recommended to use the latest browser versions for optimal performance, security, and compatibility with modern web standards.
+
 ## License
 
 [MIT License](LICENSE)
