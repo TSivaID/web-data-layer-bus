@@ -1,16 +1,18 @@
 # Web Data Layer Bus
 
-WebDataLayerBus is a custom data management utility that allows different independent modules to subscribe to updates in a shared data layer. It provides a simple yet powerful solution for managing data across multiple components without relying on any external libraries.
+WebDataLayerBus is a lightweight and flexible data management utility designed to facilitate seamless communication between independent modules in web applications. By utilizing a shared data layer and the publish-subscribe pattern, WebDataLayerBus enables different components to subscribe to updates and react to changes in the data layer, ensuring efficient data synchronization across your application.
 
-The architecture of WebDataLayerBus is based on the publish-subscribe pattern. When new data is pushed to the data layer, all subscribed modules are notified, and their respective callback functions are called with the new data.
+The core functionality of WebDataLayerBus revolves around its ability to push data to a shared data layer, while automatically notifying subscribed modules of any updates. This approach simplifies data management and promotes modular, decoupled architecture in web applications, without the need for external dependencies or complex integration.
 
 ## Features
 
-- Customizable data layer names
-- Subscribe to updates in the data layer
-- Push new data to the data layer
-- Notify all subscribers when new data is pushed
-- Loading independent modules order does not matter since it processes all messages in the array when a new subscriber is added.
+- **Customizable data layer names:** Allows you to create multiple data layers with unique names, avoiding conflicts between different parts of your application.
+- **Subscribe to updates in the data layer:** Modules can subscribe to specific events in the data layer, receiving updates when new data is pushed.
+- **Push new data to the data layer:** Modules can push new data or events to the data layer, triggering updates for subscribed modules.
+- **Notify all subscribers when new data is pushed:** When new data is pushed to the data layer, all subscribed modules are notified, allowing them to react accordingly.
+- **Late subscription handling:** If a module subscribes after some data has already been pushed to the data layer, it will still receive and process all the previous messages, ensuring that the loading order of independent modules does not matter.
+- **Error handling:** Prevents duplicate subscriptions by throwing an error if a module tries to subscribe with an already-existing subscriber name.
+- **Minified version available:** A minified version of the library is provided for production use, without any `console.log` messages. It's ready to be embedded in your webpage without any build process.
 
 ## Usage
 
@@ -78,7 +80,7 @@ The architecture of WebDataLayerBus is based on the publish-subscribe pattern. W
 
 3. **Create action handlers**
 
-   Create action handlers that will process the data pushed to the data layer bus.
+   Create action handlers that will process the data pushed to the data layer.
 
    ```javascript
    // Independent Module A
@@ -102,7 +104,7 @@ The architecture of WebDataLayerBus is based on the publish-subscribe pattern. W
 
 4. **Register action handlers for subscribing data layer updates**
 
-   Register action handlers to process the data pushed to the data layer bus. Action handlers will be called when new data is pushed to the data layer bus.
+   Register action handlers to process the data pushed to the data layer. Action handlers will be called when new data is pushed to the data layer.
 
    ```javascript
    // Independent Module A
@@ -157,8 +159,6 @@ The architecture of WebDataLayerBus is based on the publish-subscribe pattern. W
      payload: { id: "abcxyz", categories: ["News"] },
    });
    ```
-
-In this way, independent modules can subscribe to updates in the shared data layer and process the data pushed to the data layer. The order in which the independent modules are loaded does not matter since it processes all messages in the array when a new subscriber is added.
 
 ## License
 
