@@ -54,7 +54,7 @@ Here is a simple text-based diagram illustrating the architecture design of WebD
 
    To get started, simply embed the WebDataLayerBus JavaScript code snippet into your webpage. It is recommended to place the code inside the `<head>` tag, before loading any other dependencies, to ensure that the utility is available for all subsequent scripts.
 
-   _Original version:_
+   _**Original version of the WebDatalayerBus's snippet:**_
 
     ```javascript
     (function () {
@@ -100,7 +100,7 @@ Here is a simple text-based diagram illustrating the architecture design of WebD
     })();
     ```
 
-   _Minified version:_
+   _**Minified version of the WebDatalayerBus's snippet for production environments:**_
 
     ```javascript
     !function(){function e(e){e=e||"webDataLayerBus",window[e]=window[e]||[],window[e+"Subscribers"]=window[e+"Subscribers"]||{};var n=Array.prototype.push;window[e].push=function(t){if(t.subscriber&&t.callback&&"function"==typeof t.callback){if(window[e+"Subscribers"][t.subscriber])throw new Error("Subscriber "+t.subscriber+" already exists");window[e+"Subscribers"][t.subscriber]=t.callback;for(var r=0;r<window[e].length;r++)t.callback(window[e][r])}else{n.call(window[e],t);for(var s in window[e+"Subscribers"])Object.prototype.hasOwnProperty.call(window[e+"Subscribers"],s)&&function(){try{window[e+"Subscribers"][s](t)}catch(e){console.error("Error in subscriber "+s+": ",e)}}()}}}window.WebDataLayerBus=e}();
